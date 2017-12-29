@@ -3,6 +3,9 @@ package com.github.gregwhitaker.ratpackerrorhandler.example.api.user.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Response object returned from {@link com.github.gregwhitaker.ratpackerrorhandler.example.api.user.ListUsersHandler}.
+ */
 public class ListUsersResponse {
     private final List<User> users = new ArrayList<>();
 

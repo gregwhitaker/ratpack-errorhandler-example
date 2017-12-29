@@ -1,5 +1,8 @@
 package com.github.gregwhitaker.ratpackerrorhandler.example.services.user.model;
 
+/**
+ * User data returned from {@link com.github.gregwhitaker.ratpackerrorhandler.example.services.user.UserService}
+ */
 public class User {
     private final String username;
     private final boolean active;

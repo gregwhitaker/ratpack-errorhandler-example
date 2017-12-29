@@ -8,6 +8,9 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.jackson.Jackson;
 
+/**
+ * Handler responsible for retrieving all users in the system.
+ */
 public class ListUsersHandler implements Handler {
 
     @Inject

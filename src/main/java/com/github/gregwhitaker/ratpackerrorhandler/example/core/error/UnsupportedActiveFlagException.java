@@ -1,5 +1,8 @@
 package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
 
+/**
+ * Exception thrown when an invalid active flag is supplied.
+ */
 public class UnsupportedActiveFlagException extends BaseFieldException {
 
     public UnsupportedActiveFlagException() {

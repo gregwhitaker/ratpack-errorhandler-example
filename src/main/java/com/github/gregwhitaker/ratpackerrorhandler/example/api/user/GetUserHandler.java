@@ -8,6 +8,9 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.jackson.Jackson;
 
+/**
+ * Handler responsible for retrieving user data by the username.
+ */
 public class GetUserHandler implements Handler {
 
     @Inject

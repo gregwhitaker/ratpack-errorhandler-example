@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Dummy service for querying user data.
+ */
 @Singleton
 public class UserService {
     private static final Map<String, User> USERS = new HashMap<>();

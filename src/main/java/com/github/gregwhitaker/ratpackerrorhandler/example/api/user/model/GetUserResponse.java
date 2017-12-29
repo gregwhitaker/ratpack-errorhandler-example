@@ -1,5 +1,8 @@
 package com.github.gregwhitaker.ratpackerrorhandler.example.api.user.model;
 
+/**
+ * Response object returned from {@link com.github.gregwhitaker.ratpackerrorhandler.example.api.user.GetUserHandler}.
+ */
 public class GetUserResponse {
     private String username;
     private boolean active;
