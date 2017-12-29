@@ -3,6 +3,8 @@
 
 An example of using a global error handler in [Ratpack](http://www.ratpack.io).
 
+This example starts a simple service for querying user data with a couple built-in error conditions to show you how exceptions are raised and handled by the global error handler.
+
 ## Running the Example
 Start the example by running the following Gradle command:
 
