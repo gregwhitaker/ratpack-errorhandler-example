@@ -1,4 +1,7 @@
 # ratpack-errorhandler-example
+[![Build Status](https://travis-ci.org/gregwhitaker/ratpack-errorhandler-example.svg?branch=master)](https://travis-ci.org/gregwhitaker/ratpack-errorhandler-example)
+
+An example of using a global error handler in [Ratpack](http://www.ratpack.io).
 
 ## Running the Example
 Start the example by running the following Gradle command:
