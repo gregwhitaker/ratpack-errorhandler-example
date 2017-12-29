@@ -10,6 +10,36 @@ public abstract class BaseFieldException extends Throwable {
     private String errorDetailUrl;
     private List<FieldExceptionDetail> fieldErrors;
 
+    public BaseFieldException() {
+        // Noop
+    }
+
+    public BaseFieldException(int status, String errorMessage) {
+        this.status = status;
+        this.errorMessage = errorMessage;
+    }
+
+    public BaseFieldException(int status, String errorCode, String errorMessage) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
+    public BaseFieldException(int status, String errorCode, String errorMessage, String errorDetail) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.errorDetail = errorDetail;
+    }
+
+    public BaseFieldException(int status, String errorCode, String errorMessage, String errorDetail, String errorDetailUrl) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.errorDetail = errorDetail;
+        this.errorDetailUrl = errorDetailUrl;
+    }
+
     public int getStatus() {
         return status;
     }

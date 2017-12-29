@@ -7,6 +7,36 @@ public abstract class BaseException extends Throwable {
     private String errorDetail;
     private String errorDetailUrl;
 
+    public BaseException() {
+        // Noop
+    }
+
+    public BaseException(int status, String errorMessage) {
+        this.status = status;
+        this.errorMessage = errorMessage;
+    }
+
+    public BaseException(int status, String errorCode, String errorMessage) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
+    public BaseException(int status, String errorCode, String errorMessage, String errorDetail) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.errorDetail = errorDetail;
+    }
+
+    public BaseException(int status, String errorCode, String errorMessage, String errorDetail, String errorDetailUrl) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.errorDetail = errorDetail;
+        this.errorDetailUrl = errorDetailUrl;
+    }
+
     public int getStatus() {
         return status;
     }
