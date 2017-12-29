@@ -5,6 +5,9 @@ import com.github.gregwhitaker.ratpackerrorhandler.example.api.user.ListUsersHan
 import ratpack.func.Action;
 import ratpack.handling.Chain;
 
+/**
+ * All restful endpoints exposed by this application.
+ */
 public class ApiEndpoints implements Action<Chain> {
 
     @Override
