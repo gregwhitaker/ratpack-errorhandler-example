@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ratpack.error.internal.ErrorHandler;
 import ratpack.handling.Context;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,23 +18,36 @@ public class GlobalErrorHandler implements ErrorHandler {
 
     @Override
     public void error(Context context, int statusCode) throws Exception {
-        LOG.debug("Client error");
+        context.getResponse().status(statusCode).send();
     }
 
     @Override
     public void error(Context context, Throwable throwable) throws Exception {
-        LOG.debug("Server error");
+        if (throwable instanceof BaseException) {
+            LOG.info("Server error");
+        } else {
+            context.getResponse().status(500);
+        }
+
+        context.getResponse().send();
     }
 
     /**
-     *
+     * Error response
      */
-    private static class ErrorResponse {
-        private int status;
-        private String code;
-        private String message;
-        private String detail;
-        private String help;
+    private static class ErrorResponse implements Serializable {
+        private static final long serialVersionUID = -9089646869966970667L;
+
+        private int status;         // HTTP status code
+        private String code;        // Error code
+        private String message;     // Error message
+        private String detail;      // Detailed error message
+        private String help;        // Help URL
+
+        ErrorResponse(int status, String message) {
+            this.status = status;
+            this.message = message;
+        }
 
         public int getStatus() {
             return status;
@@ -77,15 +91,22 @@ public class GlobalErrorHandler implements ErrorHandler {
     }
 
     /**
-     *
+     * Field-level error response
      */
-    private static class FieldErrorResponse {
-        private int status;
-        private String code;
-        private String message;
-        private String detail;
-        private String help;
-        private List<FieldError> fieldErrors;
+    private static class FieldErrorResponse implements Serializable {
+        private static final long serialVersionUID = 171077544021179023L;
+
+        private int status;                     // HTTP status code
+        private String code;                    // Error code
+        private String message;                 // Error message
+        private String detail;                  // Detailed error message
+        private String help;                    // Help URL
+        private List<FieldError> fieldErrors;   // Field-level error details
+
+        public FieldErrorResponse(int status, String message) {
+            this.status = status;
+            this.message = message;
+        }
 
         public synchronized void addFieldError(FieldError fieldError) {
             if (fieldErrors == null) {
@@ -145,14 +166,20 @@ public class GlobalErrorHandler implements ErrorHandler {
     }
 
     /**
-     *
+     * Field-level error details
      */
-    private static class FieldError {
-        private String field;
-        private String code;
-        private String message;
-        private String detail;
-        private String help;
+    private static class FieldError implements Serializable {
+        private static final long serialVersionUID = 4451792396257629282L;
+
+        private String field;       // Field name
+        private String code;        // Error code
+        private String message;     // Error message
+        private String detail;      // Detailed error message
+        private String help;        // Help URL
+
+        public FieldError(String field) {
+            this.field = field;
+        }
 
         public String getField() {
             return field;

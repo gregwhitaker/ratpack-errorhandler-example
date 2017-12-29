@@ -21,7 +21,7 @@ public class Main {
                         .module(ApiModule.class)))
                 .handlers(c -> c
                         .insert(ApiEndpoints.class)
-                        .files(f -> f.indexFiles("index.html")))
+                        .files(f -> f.dir("public").indexFiles("index.html")))
         );
     }
 }
