@@ -21,8 +21,16 @@ public class UserService {
         USERS.put("john", new User("john", true));
     }
 
-    public List<User> findAll() {
-        return Collections.unmodifiableList(new ArrayList<>(USERS.values()));
+    public List<User> findAll(boolean active) {
+        List<User> userList = new ArrayList<>();
+
+        USERS.forEach((s, user) -> {
+            if (user.isActive() == active) {
+                userList.add(user);
+            }
+        });
+
+        return Collections.unmodifiableList(userList);
     }
 
     public User findOne(String username) {

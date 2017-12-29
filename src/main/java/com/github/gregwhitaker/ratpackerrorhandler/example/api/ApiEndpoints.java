@@ -13,6 +13,6 @@ public class ApiEndpoints implements Action<Chain> {
     @Override
     public void execute(Chain chain) throws Exception {
         chain.get("users", ListUsersHandler.class);
-        chain.get("users/:id", GetUserHandler.class);
+        chain.get("users/:username", GetUserHandler.class);
     }
 }
