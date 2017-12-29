@@ -39,10 +39,8 @@ public class GlobalErrorHandler implements ErrorHandler {
         } else {
             ErrorResponse error = new ErrorResponse(500, "An internal server error occurred.");
 
+            // Expose sensitive information if running in development mode
             if (context.getServerConfig().isDevelopment()) {
-                LOG.warn("The server is currently running in development mode. This error handler is " +
-                        "exposing sensitive information that should not be included in production deployments.");
-
                 error.setDetail(throwable.getMessage());
                 error.setStacktrace(Throwables.getStackTraceAsString(throwable));
             }
