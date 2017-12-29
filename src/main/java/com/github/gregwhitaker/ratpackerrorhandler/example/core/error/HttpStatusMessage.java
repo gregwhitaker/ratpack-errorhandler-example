@@ -3,8 +3,11 @@ package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Mapping of HTTP status code to message.
+ */
 public class HttpStatusMessage {
-    private static Map<Integer, String> MESSAGES = new HashMap<>(100);
+    private static final Map<Integer, String> MESSAGES = new HashMap<>();
 
     static {
         // 1xx Informational
@@ -80,6 +83,12 @@ public class HttpStatusMessage {
         MESSAGES.put(511, "Network Authentication Required");
     }
 
+    /**
+     * Get the message for the supplied HTTP status code.
+     *
+     * @param status HTTP status code
+     * @return message associated with the HTTP status code
+     */
     public static String of(int status) {
         return MESSAGES.getOrDefault(status, null);
     }
