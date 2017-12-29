@@ -1,5 +1,8 @@
 package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.error.internal.ErrorHandler;
@@ -16,8 +19,11 @@ import java.util.List;
 public class GlobalErrorHandler implements ErrorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(GlobalErrorHandler.class);
 
+    private final ObjectMapper mapper;
+
     public GlobalErrorHandler() {
-        // TODO: Configure Jackson here
+        this.mapper = new ObjectMapper();
+        this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     @Override
@@ -29,11 +35,21 @@ public class GlobalErrorHandler implements ErrorHandler {
     public void error(Context context, Throwable throwable) throws Exception {
         if (throwable instanceof BaseException) {
             LOG.info("Server error");
+            context.getResponse().send();
         } else {
-            context.getResponse().status(500);
-        }
+            ErrorResponse error = new ErrorResponse(500, "An internal server error occurred.");
 
-        context.getResponse().send();
+            if (context.getServerConfig().isDevelopment()) {
+                LOG.warn("The server is currently running in development mode. This error handler is " +
+                        "exposing sensitive information that should not be included in production deployments.");
+
+                error.setDetail(throwable.getMessage());
+                error.setStacktrace(Throwables.getStackTraceAsString(throwable));
+            }
+
+            context.getResponse().status(500);
+            context.getResponse().send(mapper.writeValueAsString(error));
+        }
     }
 
     /**
