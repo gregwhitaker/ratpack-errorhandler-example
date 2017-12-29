@@ -67,7 +67,7 @@ public abstract class BaseFieldException extends Throwable {
         this.fieldErrors = fieldErrors;
     }
 
-    public synchronized void addFieldExceptionDetail(String field, String fieldErrorMessage) {
+    public synchronized void addField(String field, String fieldErrorMessage) {
         if (fieldErrors == null) {
             this.fieldErrors = new ArrayList<>();
         }
@@ -75,7 +75,7 @@ public abstract class BaseFieldException extends Throwable {
         this.fieldErrors.add(new FieldExceptionDetail(field, fieldErrorMessage));
     }
 
-    public synchronized void addFieldExceptionDetail(String field, String fieldErrorCode, String fieldErrorMessage) {
+    public synchronized void addField(String field, String fieldErrorCode, String fieldErrorMessage) {
         if (fieldErrors == null) {
             this.fieldErrors = new ArrayList<>();
         }
@@ -86,7 +86,7 @@ public abstract class BaseFieldException extends Throwable {
         this.fieldErrors.add(fieldExceptionDetail);
     }
 
-    public synchronized void addFieldExceptionDetail(String field, String fieldErrorCode, String fieldErrorMessage, String fieldErrorDetail) {
+    public synchronized void addField(String field, String fieldErrorCode, String fieldErrorMessage, String fieldErrorDetail) {
         if (fieldErrors == null) {
             this.fieldErrors = new ArrayList<>();
         }
@@ -98,7 +98,7 @@ public abstract class BaseFieldException extends Throwable {
         this.fieldErrors.add(fieldExceptionDetail);
     }
 
-    public synchronized void addFieldExceptionDetail(String field, String fieldErrorCode, String fieldErrorMessage, String fieldErrorDetail, String fieldErrorDetailUrl) {
+    public synchronized void addField(String field, String fieldErrorCode, String fieldErrorMessage, String fieldErrorDetail, String fieldErrorDetailUrl) {
         if (fieldErrors == null) {
             this.fieldErrors = new ArrayList<>();
         }
