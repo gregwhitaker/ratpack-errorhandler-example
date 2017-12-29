@@ -1,6 +1,6 @@
 package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
 
-public abstract class BaseException extends Throwable {
+public abstract class BaseException extends RuntimeException {
     private int status = 500;
     private String errorCode;
     private String errorMessage = "An error occurred. Please contact support.";

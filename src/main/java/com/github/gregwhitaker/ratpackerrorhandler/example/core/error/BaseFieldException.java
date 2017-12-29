@@ -3,7 +3,7 @@ package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseFieldException extends Throwable {
+public abstract class BaseFieldException extends RuntimeException {
     private int status;
     private String errorCode;
     private String errorMessage;
