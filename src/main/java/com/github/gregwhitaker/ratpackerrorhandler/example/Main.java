@@ -2,7 +2,7 @@ package com.github.gregwhitaker.ratpackerrorhandler.example;
 
 import com.github.gregwhitaker.ratpackerrorhandler.example.api.ApiEndpoints;
 import com.github.gregwhitaker.ratpackerrorhandler.example.api.ApiModule;
-import com.github.gregwhitaker.ratpackerrorhandler.example.core.error.ErrorModule;
+import com.github.gregwhitaker.ratpackerrorhandler.example.core.errorhandler.ErrorModule;
 import ratpack.guice.Guice;
 import ratpack.server.BaseDir;
 import ratpack.server.RatpackServer;

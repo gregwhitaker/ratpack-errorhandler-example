@@ -1,4 +1,4 @@
-package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
+package com.github.gregwhitaker.ratpackerrorhandler.example.core.errorhandler;
 
 import java.util.HashMap;
 import java.util.Map;

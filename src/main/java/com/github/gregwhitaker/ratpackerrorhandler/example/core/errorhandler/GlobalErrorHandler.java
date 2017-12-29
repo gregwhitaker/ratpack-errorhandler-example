@@ -1,9 +1,11 @@
-package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
+package com.github.gregwhitaker.ratpackerrorhandler.example.core.errorhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.gregwhitaker.ratpackerrorhandler.example.core.error.BaseException;
+import com.github.gregwhitaker.ratpackerrorhandler.example.core.error.BaseFieldException;
 import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,8 @@ public class GlobalErrorHandler implements ErrorHandler {
         if (throwable instanceof BaseException) {
             LOG.info("Server error");
             context.getResponse().send();
+        } else if (throwable instanceof BaseFieldException) {
+
         } else {
             ErrorResponse error = new ErrorResponse(500, "An error occurred. Please contact support.");
 
