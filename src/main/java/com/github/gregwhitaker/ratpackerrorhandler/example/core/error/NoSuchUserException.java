@@ -7,7 +7,7 @@ public class NoSuchUserException extends BaseException {
     private final String username;
 
     public NoSuchUserException(String username) {
-        super(404, "NoSuchUserException", "1234", String.format("User '%s' does not exist!", username));
+        super(404, "5678", "NoSuchUserException", String.format("User '%s' does not exist!", username));
         this.username = username;
     }
 

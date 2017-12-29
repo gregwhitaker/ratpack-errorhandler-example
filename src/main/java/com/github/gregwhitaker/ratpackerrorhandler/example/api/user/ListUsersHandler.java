@@ -6,6 +6,7 @@ import com.github.gregwhitaker.ratpackerrorhandler.example.services.user.UserSer
 import com.google.inject.Inject;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
+import ratpack.jackson.Jackson;
 
 public class ListUsersHandler implements Handler {
 
@@ -24,6 +25,6 @@ public class ListUsersHandler implements Handler {
 
         userService.findAll(Boolean.parseBoolean(activeFlag)).forEach(user -> response.addUser(user.getUsername(), user.isActive()));
 
-        ctx.render(response);
+        ctx.render(Jackson.json(response));
     }
 }

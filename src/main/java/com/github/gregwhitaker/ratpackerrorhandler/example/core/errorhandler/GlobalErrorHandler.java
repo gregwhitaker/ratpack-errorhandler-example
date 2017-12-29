@@ -11,11 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.error.internal.ErrorHandler;
 import ratpack.handling.Context;
+import ratpack.jackson.Jackson;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Error handler responsible for capturing all errors within the application and
@@ -39,10 +42,48 @@ public class GlobalErrorHandler implements ErrorHandler {
     @Override
     public void error(Context context, Throwable throwable) throws Exception {
         if (throwable instanceof BaseException) {
-            LOG.info("Server error");
-            context.getResponse().send();
-        } else if (throwable instanceof BaseFieldException) {
+            ErrorResponse error = new ErrorResponse(((BaseException) throwable).getStatus(), ((BaseException) throwable).getErrorMessage());
+            error.setErrorCode(((BaseException) throwable).getErrorCode());
+            error.setErrorDetail(((BaseException) throwable).getErrorDetail());
+            error.setErrorDetailUrl(((BaseException) throwable).getErrorDetailUrl());
 
+            // Expose sensitive information if running in development mode
+            if (context.getServerConfig().isDevelopment()) {
+                error.setStacktrace(Throwables.getStackTraceAsString(throwable));
+            }
+
+            context.getResponse().status(((BaseException) throwable).getStatus());
+            context.getResponse().send(mapper.writeValueAsString(error));
+        } else if (throwable instanceof BaseFieldException) {
+            FieldErrorResponse error = new FieldErrorResponse(((BaseFieldException) throwable).getStatus(), ((BaseFieldException) throwable).getErrorMessage());
+            error.setErrorCode(((BaseFieldException) throwable).getErrorCode());
+            error.setErrorDetail(((BaseFieldException) throwable).getErrorDetail());
+            error.setErrorDetailUrl(((BaseFieldException) throwable).getErrorDetailUrl());
+
+            List<FieldError> fieldErrors = new ArrayList<>();
+
+            ((BaseFieldException) throwable).getFieldErrors().forEach(new Consumer<BaseFieldException.FieldExceptionDetail>() {
+                @Override
+                public void accept(BaseFieldException.FieldExceptionDetail fieldExceptionDetail) {
+                    FieldError fieldError = new FieldError(fieldExceptionDetail.getField());
+                    fieldError.setErrorCode(fieldExceptionDetail.getErrorCode());
+                    fieldError.setErrorMessage(fieldExceptionDetail.getErrorMessage());
+                    fieldError.setErrorDetail(fieldExceptionDetail.getErrorDetail());
+                    fieldError.setErrorDetailUrl(fieldExceptionDetail.getErrorDetailUrl());
+
+                    fieldErrors.add(fieldError);
+                }
+            });
+
+            error.setFieldErrors(fieldErrors);
+
+            // Expose sensitive information if running in development mode
+            if (context.getServerConfig().isDevelopment()) {
+                error.setStacktrace(Throwables.getStackTraceAsString(throwable));
+            }
+
+            context.getResponse().status(((BaseFieldException) throwable).getStatus());
+            context.getResponse().send(mapper.writeValueAsString(error));
         } else {
             ErrorResponse error = new ErrorResponse(500, "An error occurred. Please contact support.");
 
