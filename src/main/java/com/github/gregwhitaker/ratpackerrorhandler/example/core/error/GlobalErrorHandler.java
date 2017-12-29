@@ -1,6 +1,8 @@
 package com.github.gregwhitaker.ratpackerrorhandler.example.core.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import ratpack.handling.Context;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Error handler responsible for capturing all errors within the application and
@@ -37,11 +40,11 @@ public class GlobalErrorHandler implements ErrorHandler {
             LOG.info("Server error");
             context.getResponse().send();
         } else {
-            ErrorResponse error = new ErrorResponse(500, "An internal server error occurred.");
+            ErrorResponse error = new ErrorResponse(500, "An error occurred. Please contact support.");
 
             // Expose sensitive information if running in development mode
             if (context.getServerConfig().isDevelopment()) {
-                error.setDetail(throwable.getMessage());
+                error.setErrorDetail(throwable.getMessage());
                 error.setStacktrace(Throwables.getStackTraceAsString(throwable));
             }
 
@@ -53,19 +56,40 @@ public class GlobalErrorHandler implements ErrorHandler {
     /**
      * Error response
      */
+    @JsonPropertyOrder(value = {
+            "id",
+            "status",
+            "statusMessage",
+            "errorCode",
+            "errorMessage",
+            "errorDetail",
+            "errorDetailUrl",
+            "stacktrace"
+    })
     private static class ErrorResponse implements Serializable {
         private static final long serialVersionUID = -9089646869966970667L;
 
-        private int status;         // HTTP status code
-        private String code;        // Error code
-        private String message;     // Error message
-        private String detail;      // Detailed error message
-        private String help;        // Help URL
-        private String stacktrace;  // Stacktrace
+        private String id;
+        private int status;
+        private String errorCode;
+        private String errorMessage;
+        private String errorDetail;
+        private String errorDetailUrl;
+        private String stacktrace;
 
-        ErrorResponse(int status, String message) {
+
+        ErrorResponse(int status, String errorMessage) {
+            this.id = UUID.randomUUID().toString();
             this.status = status;
-            this.message = message;
+            this.errorMessage = errorMessage;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
 
         public int getStatus() {
@@ -76,36 +100,41 @@ public class GlobalErrorHandler implements ErrorHandler {
             this.status = status;
         }
 
-        public String getCode() {
-            return code;
+        @JsonProperty("statusMessage")
+        public String getStatusMessage() {
+            return HttpStatusMessage.of(status);
         }
 
-        public void setCode(String code) {
-            this.code = code;
+        public String getErrorCode() {
+            return errorCode;
         }
 
-        public String getMessage() {
-            return message;
+        public void setErrorCode(String errorCode) {
+            this.errorCode = errorCode;
         }
 
-        public void setMessage(String message) {
-            this.message = message;
+        public String getErrorMessage() {
+            return errorMessage;
         }
 
-        public String getDetail() {
-            return detail;
+        public void setErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
         }
 
-        public void setDetail(String detail) {
-            this.detail = detail;
+        public String getErrorDetail() {
+            return errorDetail;
         }
 
-        public String getHelp() {
-            return help;
+        public void setErrorDetail(String errorDetail) {
+            this.errorDetail = errorDetail;
         }
 
-        public void setHelp(String help) {
-            this.help = help;
+        public String getErrorDetailUrl() {
+            return errorDetailUrl;
+        }
+
+        public void setErrorDetailUrl(String errorDetailUrl) {
+            this.errorDetailUrl = errorDetailUrl;
         }
 
         public String getStacktrace() {
@@ -120,20 +149,33 @@ public class GlobalErrorHandler implements ErrorHandler {
     /**
      * Field-level error response
      */
+    @JsonPropertyOrder(value = {
+            "id",
+            "status",
+            "statusMessage",
+            "errorCode",
+            "errorMessage",
+            "errorDetail",
+            "errorDetailUrl",
+            "fieldErrors",
+            "stacktrace"
+    })
     private static class FieldErrorResponse implements Serializable {
         private static final long serialVersionUID = 171077544021179023L;
 
-        private int status;                     // HTTP status code
-        private String code;                    // Error code
-        private String message;                 // Error message
-        private String detail;                  // Detailed error message
-        private String help;                    // Help URL
-        private String stacktrace;              // Stacktrace
-        private List<FieldError> fieldErrors;   // Field-level error details
+        private String id;
+        private int status;
+        private String errorCode;
+        private String errorMessage;
+        private String errorDetail;
+        private String errorDetailUrl;
+        private List<FieldError> fieldErrors;
+        private String stacktrace;
 
-        public FieldErrorResponse(int status, String message) {
+        public FieldErrorResponse(int status, String errorMessage) {
+            this.id = UUID.randomUUID().toString();
             this.status = status;
-            this.message = message;
+            this.errorMessage = errorMessage;
         }
 
         public synchronized void addFieldError(FieldError fieldError) {
@@ -144,6 +186,14 @@ public class GlobalErrorHandler implements ErrorHandler {
             fieldErrors.add(fieldError);
         }
 
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
         public int getStatus() {
             return status;
         }
@@ -152,44 +202,41 @@ public class GlobalErrorHandler implements ErrorHandler {
             this.status = status;
         }
 
-        public String getCode() {
-            return code;
+        @JsonProperty("statusMessage")
+        public String getStatusMessage() {
+            return HttpStatusMessage.of(status);
         }
 
-        public void setCode(String code) {
-            this.code = code;
+        public String getErrorCode() {
+            return errorCode;
         }
 
-        public String getMessage() {
-            return message;
+        public void setErrorCode(String errorCode) {
+            this.errorCode = errorCode;
         }
 
-        public void setMessage(String message) {
-            this.message = message;
+        public String getErrorMessage() {
+            return errorMessage;
         }
 
-        public String getDetail() {
-            return detail;
+        public void setErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
         }
 
-        public void setDetail(String detail) {
-            this.detail = detail;
+        public String getErrorDetail() {
+            return errorDetail;
         }
 
-        public String getHelp() {
-            return help;
+        public void setErrorDetail(String errorDetail) {
+            this.errorDetail = errorDetail;
         }
 
-        public void setHelp(String help) {
-            this.help = help;
+        public String getErrorDetailUrl() {
+            return errorDetailUrl;
         }
 
-        public String getStacktrace() {
-            return stacktrace;
-        }
-
-        public void setStacktrace(String stacktrace) {
-            this.stacktrace = stacktrace;
+        public void setErrorDetailUrl(String errorDetailUrl) {
+            this.errorDetailUrl = errorDetailUrl;
         }
 
         public List<FieldError> getFieldErrors() {
@@ -199,6 +246,14 @@ public class GlobalErrorHandler implements ErrorHandler {
         public void setFieldErrors(List<FieldError> fieldErrors) {
             this.fieldErrors = fieldErrors;
         }
+
+        public String getStacktrace() {
+            return stacktrace;
+        }
+
+        public void setStacktrace(String stacktrace) {
+            this.stacktrace = stacktrace;
+        }
     }
 
     /**
@@ -207,11 +262,11 @@ public class GlobalErrorHandler implements ErrorHandler {
     private static class FieldError implements Serializable {
         private static final long serialVersionUID = 4451792396257629282L;
 
-        private String field;       // Field name
-        private String code;        // Error code
-        private String message;     // Error message
-        private String detail;      // Detailed error message
-        private String help;        // Help URL
+        private String field;
+        private String errorCode;
+        private String errorMessage;
+        private String errorDetail;
+        private String errorDetailUrl;
 
         public FieldError(String field) {
             this.field = field;
@@ -225,36 +280,36 @@ public class GlobalErrorHandler implements ErrorHandler {
             this.field = field;
         }
 
-        public String getCode() {
-            return code;
+        public String getErrorCode() {
+            return errorCode;
         }
 
-        public void setCode(String code) {
-            this.code = code;
+        public void setErrorCode(String errorCode) {
+            this.errorCode = errorCode;
         }
 
-        public String getMessage() {
-            return message;
+        public String getErrorMessage() {
+            return errorMessage;
         }
 
-        public void setMessage(String message) {
-            this.message = message;
+        public void setErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
         }
 
-        public String getDetail() {
-            return detail;
+        public String getErrorDetail() {
+            return errorDetail;
         }
 
-        public void setDetail(String detail) {
-            this.detail = detail;
+        public void setErrorDetail(String errorDetail) {
+            this.errorDetail = errorDetail;
         }
 
-        public String getHelp() {
-            return help;
+        public String getErrorDetailUrl() {
+            return errorDetailUrl;
         }
 
-        public void setHelp(String help) {
-            this.help = help;
+        public void setErrorDetailUrl(String errorDetailUrl) {
+            this.errorDetailUrl = errorDetailUrl;
         }
     }
 }
