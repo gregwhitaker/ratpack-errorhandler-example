@@ -9,6 +9,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Error handler responsible for capturing all errors within the application and
+ * rendering a standardized error response message.
+ */
 public class GlobalErrorHandler implements ErrorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(GlobalErrorHandler.class);
 
@@ -43,6 +47,7 @@ public class GlobalErrorHandler implements ErrorHandler {
         private String message;     // Error message
         private String detail;      // Detailed error message
         private String help;        // Help URL
+        private String stacktrace;  // Stacktrace
 
         ErrorResponse(int status, String message) {
             this.status = status;
@@ -88,6 +93,14 @@ public class GlobalErrorHandler implements ErrorHandler {
         public void setHelp(String help) {
             this.help = help;
         }
+
+        public String getStacktrace() {
+            return stacktrace;
+        }
+
+        public void setStacktrace(String stacktrace) {
+            this.stacktrace = stacktrace;
+        }
     }
 
     /**
@@ -101,6 +114,7 @@ public class GlobalErrorHandler implements ErrorHandler {
         private String message;                 // Error message
         private String detail;                  // Detailed error message
         private String help;                    // Help URL
+        private String stacktrace;              // Stacktrace
         private List<FieldError> fieldErrors;   // Field-level error details
 
         public FieldErrorResponse(int status, String message) {
@@ -154,6 +168,14 @@ public class GlobalErrorHandler implements ErrorHandler {
 
         public void setHelp(String help) {
             this.help = help;
+        }
+
+        public String getStacktrace() {
+            return stacktrace;
+        }
+
+        public void setStacktrace(String stacktrace) {
+            this.stacktrace = stacktrace;
         }
 
         public List<FieldError> getFieldErrors() {
